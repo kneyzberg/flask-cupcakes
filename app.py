@@ -30,11 +30,9 @@ def create_cupcake():
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
-    if request.json.get("image"):
-        image = request.json["image"]
-    else:
-        image = None
-
+    
+    image = request.json["image"] or None
+    
     new_cupcake = Cupcake(flavor=flavor,
                           size=size,
                           rating=rating,
