@@ -20,6 +20,25 @@ async function getCupcakes() {
   }
 }
 
+async function searchCupcakes() {
+  const search = $("#search-cupcake").val()
+  console.log(search)
+  debugger
+  // let cupcakes = await axios.post("/api/cupcakes/search", {"search": "cherry"});
+  let cupcakes = await axios.get("/api/cupcakes/search", {params: {"search": "cherry"}});
+  console.log(cupcakes, "cupcakes");
+  $cupcakesSection.empty();
+  for (let cupcake of cupcakes.data.cupcakes) {
+    console.log(cupcake, "cupcake");
+    let $listItem = $("<li>");
+    $listItem.text(
+      `flavor: ${cupcake.flavor}, rating: ${cupcake.rating}, size: ${cupcake.size}`
+    );
+    $listItem.append(`<img src=${cupcake.image} class=img-thumbnail></img>`);
+    $cupcakesSection.append($listItem);
+  }
+}
+
 async function addNewCupcake() {
   const flavor = $flavorInput.val();
   const rating = $ratingInput.val();
@@ -33,6 +52,13 @@ $("#cupcake-form").on("submit", async function (evt) {
   await addNewCupcake();
   $("#cupcake-form").trigger("reset");
   getCupcakes();
+});
+
+
+$("#search-form").on("submit", async function (evt) {
+  evt.preventDefault();
+  await searchCupcakes();
+  $("#search-form").trigger("reset");
 });
 
 getCupcakes();

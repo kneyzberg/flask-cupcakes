@@ -46,6 +46,16 @@ def create_cupcake():
 
     return (jsonify(cupcake=serialized), 201)
 
+
+@app.route("/api/cupcakes/search")
+def search_cupcakes():
+    # search = request.json["search"]
+    search = request.args["search"]
+    cupcakes = Cupcake.query.filter(Cupcake.flavor.like(f'%{search}%'))
+    serialized = [c.serialize() for c in cupcakes]
+    return jsonify(cupcakes=serialized)
+
+
 @app.route("/api/cupcakes/<int:cupcake_id>", methods=["PATCH"])
 def update_cupcake(cupcake_id):
 
